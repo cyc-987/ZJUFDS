@@ -18,11 +18,16 @@ int main()
     {
         //set the result
         result = 1;
+        x = X;
+        n = N;
         start = clock();//start timing
         //main algorithm
-        long j = 0;
-        for(j=0 ; j < n; j++){
-            result *= x;
+        while(n != 0){
+            if(n%2){
+                result *= x;
+            }
+            x = x * x;
+            n /= 2;
         }
         stop = clock();//end timing
         //calculate time and print
