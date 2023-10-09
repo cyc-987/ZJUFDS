@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<time.h>
 #define X 1.001
-#define N 1000
-#define k 20
+#define N 100000
+#define k 30
 
 clock_t start, stop;
 clock_t duration;
