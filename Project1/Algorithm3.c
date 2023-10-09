@@ -36,8 +36,10 @@ int main()
     for(int i = 1; i<k+1; i++){
         temp += time[i];
     }
-    aver = ((long double)temp/(k*CLOCKS_PER_SEC));
+    aver = ((long double)temp/CLOCKS_PER_SEC);
     printf("ticks: %.0Lf\n", (long double)temp);
+    printf("total time: %.8Lf\n",aver);
+    aver /= k;
     printf("average time: %.8Lf\n",aver);
     printf("result: %Lf\n",result);
 }
