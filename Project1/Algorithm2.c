@@ -2,19 +2,20 @@
 #include<time.h>
 #define X 1.001
 #define N 1000
+#define k 20
 
 clock_t start, stop;
-double duration;
+clock_t duration;
 
 int main()
 {
     double x = X;
     long n = N;
 
-    //run 10 times to calculate the average time
-    double time[10];
+    //run k times to calculate the average time
+    clock_t time[k+1];
     long double result = 1;
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < k+1; i++)
     {
         //set the result
         result = 1;
@@ -31,18 +32,19 @@ int main()
         }
         stop = clock();//end timing
         //calculate time and print
-        duration = ((double)(stop - start))/CLOCKS_PER_SEC;
-        printf("time%d: %.8f\n",i+1,duration);
+        duration = stop - start;
         //store
         time[i] = duration;
     }
 
     //calculate the average time
-    double aver = 0;
-    for(int i = 0; i<10; i++){
-        aver += time[i];
+    long double aver = 0;
+    clock_t temp = 0;
+    for(int i = 1; i<k+1; i++){
+        temp += time[i];
     }
-    aver /= 10;
-    printf("average time: %.8f\n",aver);
-    printf("result:%Lf",result);
+    aver = ((long double)temp/(k*CLOCKS_PER_SEC));
+    printf("ticks: %.0Lf\n", (long double)temp);
+    printf("average time: %.8Lf\n",aver);
+    printf("result: %Lf\n",result);
 }

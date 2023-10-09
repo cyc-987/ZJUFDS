@@ -6,6 +6,7 @@
 
 clock_t start, stop;
 clock_t duration;
+long double mypow(double x, long n);
 
 int main()
 {
@@ -21,10 +22,7 @@ int main()
         result = 1;
         start = clock();//start timing
         //main algorithm
-        long j = 0;
-        for(j=0 ; j < n; j++){
-            result *= x;
-        }
+        result = mypow(x,n);
         stop = clock();//end timing
         //calculate time and print
         duration = stop - start;
@@ -42,4 +40,15 @@ int main()
     printf("ticks: %.0Lf\n", (long double)temp);
     printf("average time: %.8Lf\n",aver);
     printf("result: %Lf\n",result);
+}
+
+long double mypow(double x, long n)
+{
+    if(n == 0){
+        return 1;
+    }else if(n%2){
+        return mypow(x, (n-1)/2) * mypow(x, (n-1)/2) * x;
+    }else{
+        return mypow(x, n/2) * mypow(x, n/2);
+    }
 }
