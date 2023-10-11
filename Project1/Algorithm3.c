@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<time.h>
 #define X 1.001
-#define N 100000
-#define k 30
+
+#define k 100000
 
 clock_t start, stop;
 clock_t duration;
@@ -10,8 +10,10 @@ long double mypow(double x, long n);
 
 int main()
 {
+    int N[8] = {1000,5000,10000,20000,40000,60000,80000,100000};
+    for(int h = 0; h<8; h++){
     double x = X;
-    long n = N;
+    long n = N[h];
 
     //run k times to calculate the average time
     clock_t time[k+1];
@@ -41,7 +43,7 @@ int main()
     printf("total time: %.8Lf\n",aver);
     aver /= k;
     printf("average time: %.8Lf\n",aver);
-    printf("result: %Lf\n",result);
+    printf("result: %Lf\n",result);}
 }
 
 long double mypow(double x, long n)
