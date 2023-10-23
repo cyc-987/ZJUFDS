@@ -68,10 +68,8 @@ void zigzaggingTree(Tree T)
 {
     if(T == NULL) return;
 
-    //start level output
-    Tree temp = T;
     //go through all the levels and store
-    inorderLevel(temp);
+    inorderLevel(T);
     //print the tree
     int i,j;
     i = j = 0;
@@ -83,6 +81,7 @@ void zigzaggingTree(Tree T)
             }
         }
         else{
+            j = 0;
             while(num[i][j] != 0) j++;
             j--;
             for(j;j>=0;j--){
