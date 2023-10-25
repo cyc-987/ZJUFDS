@@ -28,6 +28,10 @@ int main()
     //scan total number of the cases
     int totalCases;
     scanf("%d", &totalCases);
+    if(totalCases == 0){
+        printf("empty input\n");
+        return 0;
+    }
 
     //start big loop
     int bigloop;
@@ -49,6 +53,7 @@ int main()
         Tree treeHead = buildBRTree(0, totalNodes-1, node);
 
         //judge the tree
+
         if(judgeBRTree(treeHead) == 1) printf("Yes\n");
         else printf("No\n");
     }
