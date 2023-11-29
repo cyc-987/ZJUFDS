@@ -60,14 +60,19 @@ int main()
             printf("NO\n");
             flag = 0;
             continue;
-        }
+        }//judge total num
         if(Seq[0] != Seq[seqNum-1]){
             printf("NO\n");
             flag = 0;
             continue;
-        }
+        }//judge start and end num
+        if(visited[Seq[0]] !=2){
+            printf("NO\n");
+            flag = 0;
+            continue;
+        }//judge visited times of first node
 
-        // Check if a vertex is visited more than once
+        // Check if other vertex is visited more than once
         for(i = 1; i <= totalV; i++){
             if(i != Seq[0] && visited[i] != 1){
                 printf("NO\n");
