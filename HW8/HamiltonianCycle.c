@@ -2,23 +2,7 @@
 #include <stdlib.h>
 #define maxnum 201
 
-typedef struct AdjVNode *PtrToAdjVNode; 
-struct AdjVNode{
-    int AdjV;
-    PtrToAdjVNode Next;
-};
-
-typedef struct Vnode{
-    PtrToAdjVNode FirstEdge;
-} AdjList[maxnum];
-
-typedef struct GNode *PtrToGNode;
-struct GNode{  
-    int Nv;
-    int Ne;
-    AdjList G;
-};
-typedef PtrToGNode LGraph;
+int edges[maxnum][maxnum]; // Add a 2D array to store the edges
 
 int main()
 {
@@ -27,11 +11,13 @@ int main()
     scanf("%d%d",&totalV,&totalE);
     getchar();
 
-    //create graph
-    LGraph Graph = (LGraph)malloc(sizeof(struct GNode));
-    Graph->Nv = totalV;
-    Graph->Ne = totalE;
-    
+    // Initialize the edges array
+    for(int i = 1; i <= totalV; i++){
+        for(int j = 1; j <= totalV; j++){
+            edges[i][j] = 0;
+        }
+    }
+
     //read list
     int i;
     for(i=1;i<=totalE;i++){
@@ -40,37 +26,9 @@ int main()
         scanf("%d%d",&first,&second);
         getchar();
 
-        //create node
-        PtrToAdjVNode temp = Graph->G[first].FirstEdge;
-        //first add;
-        if(temp == NULL){
-            temp = (PtrToAdjVNode)malloc(sizeof(struct AdjVNode));//malloc new node
-            temp->AdjV = second;
-            temp->Next = NULL;
-            Graph->G[first].FirstEdge = temp;
-        }else{//already has node
-            while(temp->Next) temp = temp->Next;//locate to last node
-            temp->Next = (PtrToAdjVNode)malloc(sizeof(struct AdjVNode));//malloc new node
-            temp = temp->Next;
-            temp->AdjV = second;
-            temp->Next = NULL;
-        }
-
-        //create node
-        temp = Graph->G[second].FirstEdge;
-        //first add;
-        if(temp == NULL){
-            temp = (PtrToAdjVNode)malloc(sizeof(struct AdjVNode));//malloc new node
-            temp->AdjV = first;
-            temp->Next = NULL;
-            Graph->G[second].FirstEdge = temp;
-        }else{//already has node
-            while(temp->Next) temp = temp->Next;//locate to last node
-            temp->Next = (PtrToAdjVNode)malloc(sizeof(struct AdjVNode));//malloc new node
-            temp = temp->Next;
-            temp->AdjV = first;
-            temp->Next = NULL;
-        }
+        // Add the edge to the edges array
+        edges[first][second] = 1;
+        edges[second][first] = 1;
     }
 
     //judge cycle
@@ -88,15 +46,17 @@ int main()
         scanf("%d",&seqNum);
         int scantemp;
         int Seq[maxnum];
+        int visited[maxnum] = {0}; // Add a visited array to check if a vertex is visited more than once
         for(scantemp=0;scantemp<seqNum;scantemp++){
             scanf("%d",&Seq[scantemp]);
+            visited[Seq[scantemp]]++;
         }
         getchar();
 
         //set flag
         flag = 1;
         //easy judge
-        if(seqNum != totalV+1){
+        if(seqNum != totalV+1 || seqNum == 1){
             printf("NO\n");
             flag = 0;
             continue;
@@ -107,16 +67,21 @@ int main()
             continue;
         }
 
+        // Check if a vertex is visited more than once
+        for(i = 1; i <= totalV; i++){
+            if(i != Seq[0] && visited[i] != 1){
+                printf("NO\n");
+                flag = 0;
+                break;
+            }
+        }
+
         //formal judge
         int secondnum = 1;
         for(;secondnum<=totalV-1;secondnum++){
             if(flag){
-                PtrToAdjVNode temp = Graph->G[Seq[secondnum-1]].FirstEdge;
-                while(temp){
-                    if(temp->AdjV == Seq[secondnum]) break;
-                    temp = temp->Next;
-                }
-                if(temp == NULL){
+                // Check if there is an edge in the edges array
+                if(edges[Seq[secondnum-1]][Seq[secondnum]] == 0){
                     printf("NO\n");
                     flag = 0;
                 }
