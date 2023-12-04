@@ -52,12 +52,12 @@ int main()
     for(i=0;i<Ne;i++){
         int first,second,weight;
         scanf("%d%d%d",&first,&second,&weight);getchar();
-        addEdge(G,first,second,weight);
+        addEdge(G,first,second,weight);//this add operation will add both two direction
     }
 
     //inquries
     int k;
-    scanf("%d",&k);getchar();
+    scanf("%d",&k);getchar();//read inquiry number
     for(i=1;i<=k;i++)//i is for big circle
     {
         //print result
@@ -72,15 +72,16 @@ int main()
 //functions
 void addEdge(ptrG G, int first, int second, int weight)
 {
-    if(G->L[first].FirstEdge == NULL){
+    //add edge
+    if(G->L[first].FirstEdge == NULL){//if the first edge is null
         ptrtoNode temp = (ptrtoNode)malloc(sizeof(Node));
         temp->Next = NULL;
         temp->ver = second;
         temp->weight = weight;
         G->L[first].FirstEdge = temp;
-    }else{
+    }else{//if the first edge is not null
         ptrtoNode temp = G->L[first].FirstEdge;
-        while(temp->Next) temp = temp->Next;
+        while(temp->Next) temp = temp->Next;//find the last node
         temp->Next = (ptrtoNode)malloc(sizeof(Node));
         temp = temp->Next;
         temp->Next = NULL;
@@ -108,15 +109,15 @@ void addEdge(ptrG G, int first, int second, int weight)
 
 int findMin(int Known[],long int Dist[],long int Nv,long int startPoint)//find the min distance in unknown vertix
 {
-    int i = startPoint+1;
+    int i = startPoint+1;//start from the next element
     long int min = 0;
     for(;i<=Nv;i++){
-        if(Known[i] == 1)continue;
+        if(Known[i] == 1)continue;//if known, continue
 
         if(min == 0){
-            min = i;
+            min = i;//if min is not set, set it
         }else{
-            if(Dist[min] > Dist[i]) min = i;
+            if(Dist[min] > Dist[i]) min = i;//if min is set, compare
         }
     }
     return min;
@@ -146,14 +147,15 @@ int inquiry(long int Nv, ptrG G)
 void dijkstra(int Known[], long int Dist[], int Seq[], int* flag, long int Nv, ptrG G)
 {
     //main part of dijkstra
-    int count = 1;
+    int count = 1;//count the number of known node
     for(;;)
     {
-        long int v,w;
+        long int v;
         if(!(v = findMin(Known,Dist,Nv,0))) break;//end situation
         
         //check element
         while(v){
+            //check if the element is in the sequence
             if(v != Seq[count]) v = findMin(Known,Dist,Nv,v);
             else break;
         }
@@ -166,7 +168,7 @@ void dijkstra(int Known[], long int Dist[], int Seq[], int* flag, long int Nv, p
 
         Known[v] = 1;
         ptrtoNode temp = G->L[v].FirstEdge;
-        while(temp){
+        while(temp){//update the distance
             if(!Known[temp->ver]){
                 if(Dist[v]+temp->weight < Dist[temp->ver])
                 {
