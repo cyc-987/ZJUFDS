@@ -24,8 +24,19 @@ typedef struct Graph{
 typedef Graph* ptrG;
 
 //some functions
-void addEdge(ptrG G, int first, int second, int weight);//add edges
-int findMin(int Known[],long int Dist[],long int Nv,long int startPoint);//find the min distance in unknown vertix
+
+//add edges for undirected graph
+void addEdge(ptrG G, int first, int second, int weight);
+//find the min distance in unknown vertix
+//find from startpoint to Nv(endPoint), return 0 if not find the required element
+int findMin(int Known[],long int Dist[],long int Nv,long int startPoint);
+//inquiry function
+//read the sequence and pass it to the dijkstra function
+//return 1 for success, 0 for failed
+int inquiry(long int Nv, ptrG G);
+//main dijkstra function
+//change the value in flag for inqure result
+void dijkstra(int Known[], long int Dist[], int Seq[], int* flag, long int Nv, ptrG G);
 
 int main()
 {
@@ -49,56 +60,8 @@ int main()
     scanf("%d",&k);getchar();
     for(i=1;i<=k;i++)//i is for big circle
     {
-        //read sequence into an array
-        int Seq[maxV] = {0};
-        for(int j = 0;j<=k;j++) scanf("%d",&Seq[j+1]);
-        getchar();
-
-        //start inquiry
-        int Known[maxV] = {0};//set known array
-        long int Dist[maxV];//set distance array
-        for(int j = 1;j<=Nv;j++) Dist[j] = infinity;//set to infinity
-        //do not need p[]
-
-        //process first node
-        int flag = 1;//record the result
-        Dist[Seq[1]] = 0;
-
-        //main part of dijkstra
-        int count = 1;
-        for(;;)
-        {
-            long int v,w;
-            if(!(v = findMin(Known,Dist,Nv,0))) break;//end situation
-            
-            //check element
-            while(v){
-                if(v != Seq[count]) v = findMin(Known,Dist,Nv,v);
-                else break;
-            }
-            if(v == 0){
-                flag = 0;
-                break;
-            }else{
-                count++;
-            }
-
-            Known[v] = 1;
-            ptrtoNode temp = G->L[v].FirstEdge;
-            while(temp){
-                if(!Known[temp->ver]){
-                    if(Dist[v]+temp->weight < Dist[temp->ver])
-                    {
-                        //update w
-                        Dist[temp->ver] = Dist[v]+temp->weight;
-                    }
-                }
-                temp = temp->Next;
-            }
-        }
-
         //print result
-        if(flag){
+        if(inquiry(Nv,G)){
             printf("YES\n");
         }else{
             printf("NO\n");
@@ -157,4 +120,61 @@ int findMin(int Known[],long int Dist[],long int Nv,long int startPoint)//find t
         }
     }
     return min;
+}
+
+int inquiry(long int Nv, ptrG G)
+{
+    //read sequence into an array
+    int Seq[maxV] = {0};
+    for(int j = 0;j<Nv;j++) scanf("%d",&Seq[j+1]);
+    getchar();
+
+    //start inquiry
+    int Known[maxV] = {0};//set known array
+    long int Dist[maxV];//set distance array
+    for(int j = 1;j<=Nv;j++) Dist[j] = infinity;//set to infinity
+    //do not need p[]
+
+    //process first node
+    int flag = 1;//record the result
+    Dist[Seq[1]] = 0;
+    dijkstra(Known,Dist,Seq,&flag,Nv,G);
+
+    return flag;
+}
+
+void dijkstra(int Known[], long int Dist[], int Seq[], int* flag, long int Nv, ptrG G)
+{
+    //main part of dijkstra
+    int count = 1;
+    for(;;)
+    {
+        long int v,w;
+        if(!(v = findMin(Known,Dist,Nv,0))) break;//end situation
+        
+        //check element
+        while(v){
+            if(v != Seq[count]) v = findMin(Known,Dist,Nv,v);
+            else break;
+        }
+        if(v == 0){
+            *flag = 0;
+            break;
+        }else{
+            count++;
+        }
+
+        Known[v] = 1;
+        ptrtoNode temp = G->L[v].FirstEdge;
+        while(temp){
+            if(!Known[temp->ver]){
+                if(Dist[v]+temp->weight < Dist[temp->ver])
+                {
+                    //update w
+                    Dist[temp->ver] = Dist[v]+temp->weight;
+                }
+            }
+            temp = temp->Next;
+        }
+    }
 }
