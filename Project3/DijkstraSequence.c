@@ -65,6 +65,10 @@ int main()
     long int Nv,Ne;
     scanf("%ld%ld",&Nv,&Ne);getchar();
     ptrG G = (ptrG)malloc(sizeof(Graph));
+    if (G == NULL) {
+        printf("Memory allocation failed.\n");
+        return 1;
+    }
     G->Nv = Nv;
     G->Ne = Ne;//create and store Nv and Ne;
 
@@ -96,6 +100,10 @@ void addEdge(ptrG G, int first, int second, int weight)
     //add edge
     if(G->L[first].FirstEdge == NULL){//if the first edge is null
         ptrtoNode temp = (ptrtoNode)malloc(sizeof(Node));
+        if (temp == NULL) {
+            printf("Memory allocation failed.\n");
+            exit(1);
+        }
         temp->Next = NULL;
         temp->ver = second;
         temp->weight = weight;
@@ -104,6 +112,10 @@ void addEdge(ptrG G, int first, int second, int weight)
         ptrtoNode temp = G->L[first].FirstEdge;
         while(temp->Next) temp = temp->Next;//find the last node
         temp->Next = (ptrtoNode)malloc(sizeof(Node));
+        if (temp == NULL) {
+            printf("Memory allocation failed.\n");
+            exit(1);
+        }
         temp = temp->Next;
         temp->Next = NULL;
         temp->ver = second;
@@ -113,6 +125,10 @@ void addEdge(ptrG G, int first, int second, int weight)
     //exchange
     if(G->L[second].FirstEdge == NULL){
         ptrtoNode temp = (ptrtoNode)malloc(sizeof(Node));
+        if (temp == NULL) {
+            printf("Memory allocation failed.\n");
+            exit(1);
+        }
         temp->Next = NULL;
         temp->ver = first;
         temp->weight = weight;
@@ -121,6 +137,10 @@ void addEdge(ptrG G, int first, int second, int weight)
         ptrtoNode temp = G->L[second].FirstEdge;
         while(temp->Next) temp = temp->Next;
         temp->Next = (ptrtoNode)malloc(sizeof(Node));
+        if (temp == NULL) {
+            printf("Memory allocation failed.\n");
+            exit(1);
+        }
         temp = temp->Next;
         temp->Next = NULL;
         temp->ver = first;
