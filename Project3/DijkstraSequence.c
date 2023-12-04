@@ -40,6 +40,27 @@ void dijkstra(int Known[], long int Dist[], int Seq[], int* flag, long int Nv, p
 
 int main()
 {
+    //init
+    printf("welcome and select the input mode:\n");
+    printf("1:input from file\n");
+    printf("2:input from stdin\n");
+    printf("3:exit\n");
+    //read mode
+    int mode;
+    scanf("%d",&mode);getchar();
+    if(mode == 3) return 0;//exit
+    if(mode != 1 && mode != 2){
+        printf("wrong input\n");
+        return 0;
+    }//wrong input
+
+    //input from file
+    if(mode == 1){
+        freopen("input.txt","r",stdin);
+    }else{
+        //input from stdin
+    }
+
     //read nv and ne
     long int Nv,Ne;
     scanf("%ld%ld",&Nv,&Ne);getchar();
