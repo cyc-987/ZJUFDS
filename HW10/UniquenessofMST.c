@@ -46,29 +46,35 @@ int main()
     while(Ne-count){
         edge min = getTopAndMaintainHeap(Ne-count);//take one from top
         count++;
-        printf("pop min: %d -- %d : %lld  ",min.v1,min.v2,min.weight);//tp
+        //printf("pop min: %d -- %d : %lld  ",min.v1,min.v2,min.weight);//tp
 
         int root1 = findWithCompress(min.v1);
         int root2 = findWithCompress(min.v2);//find root
 
         if(root1 == root2){
-            printf("not taken\n");
-            if(temp.v1 == min.v1 || temp.v1 == min.v2 || 
-            temp.v2 == min.v1 || temp.v2 == min.v2){
+            //printf("not taken\n");
+            if(temp.weight == min.weight && (temp.v1 == min.v1 || temp.v1 == min.v2 || 
+            temp.v2 == min.v1 || temp.v2 == min.v2)){
                 flag = 0;
-                printf("find conflict here\n");//tp
+                //printf("find conflict here\n");//tp
             }
         }else{
             unionH(root1,root2);
-            printf("taken\n");//tp 
+            //printf("taken\n");//tp 
             temp = min;//update temp
             total += min.weight;//update total
         }
     }
 
-    printf("result total: %lld\n",total);
-    if(!judgeIFconnected(Nv)) printf("the graph is connected.\n");
-    else printf("not connected and the number of tree is %d. \n",judgeIFconnected(Nv));
+    if(!judgeIFconnected(Nv)){
+        printf("%lld\n",total);
+        if(flag) printf("Yes");
+        else printf("No");
+    }
+    else{
+        printf("No MST\n");
+        printf("%d",judgeIFconnected(Nv));
+    }
 
     return 0;
 }
@@ -104,9 +110,9 @@ void buildMinHeap(int Ne)
             }
         }
     }
-    printf("min-heap build complete.\n");//testpoint
-    for(int i = 1;i<=Ne;i++) printf("%lld ",E[i].weight);
-    printf("\n");
+    //printf("min-heap build complete.\n");//testpoint
+    //for(int i = 1;i<=Ne;i++) printf("%lld ",E[i].weight);
+    //printf("\n");
 }
 
 edge getTopAndMaintainHeap(int n)
