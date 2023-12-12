@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#define Max 550
+#define Max 1200
 
 int G[Max][Max];//a 2d array to store the edges
 int Find[Max];//an array to store the relationship of identity number and number in order
@@ -89,7 +89,7 @@ int dfs(int start, int end, int max)
     if(start == end) return max;
 
     used[start] = 1;
-    for(int i = 0; i<=Max;i++){
+    for(int i = 0; i<Max;i++){
         if(G[start][i] == 0) continue;
         
         if(used[i] == 0){
