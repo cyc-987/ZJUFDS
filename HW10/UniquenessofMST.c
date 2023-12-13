@@ -12,6 +12,8 @@ typedef struct edge* ptrEdge;
 
 int Union[Max];//an array for union-find
 edge E[Max];//an array of struct edge to store edges
+edge UsedE[Max];
+int used = 0;
 
 void Exchange(int num1, int num2);
 void buildMinHeap(int Ne);
@@ -19,6 +21,9 @@ edge getTopAndMaintainHeap(int n);
 int findWithCompress(int v);
 void unionH(int h1, int h2);
 int judgeIFconnected(int Nv);
+int judgeIFunique(int v1, int v2, long long weight);
+int dfs(int start, int end, long long* weightlog, int* usedlog);
+
 
 int main()
 {
@@ -53,15 +58,15 @@ int main()
 
         if(root1 == root2){
             //printf("not taken\n");
-            if(temp.weight == min.weight && (temp.v1 == min.v1 || temp.v1 == min.v2 || 
-            temp.v2 == min.v1 || temp.v2 == min.v2)){
-                flag = 0;
+            if(temp.weight == min.weight){
+                if(judgeIFunique(min.v1,min.v2,min.weight)) flag = 0;
                 //printf("find conflict here\n");//tp
             }
         }else{
             unionH(root1,root2);
             //printf("taken\n");//tp 
             temp = min;//update temp
+            UsedE[used++] = min;
             total += min.weight;//update total
         }
     }
@@ -100,7 +105,7 @@ void buildMinHeap(int Ne)
         int child = 2*i;
         int temp = i;
         while(child <= Ne){
-            if(E[child+1].weight && E[child].weight > E[child+1].weight) child ++;
+            if(child+1 <= Ne && E[child+1].weight && E[child].weight > E[child+1].weight) child ++;
             if(E[temp].weight > E[child].weight){
                 Exchange(temp,child);
                 temp = child;
@@ -129,7 +134,7 @@ edge getTopAndMaintainHeap(int n)
     int child = 2;
     int temp = 1;
     while(child < n){
-        if(E[child+1].weight && E[child].weight > E[child+1].weight) child ++;
+        if(child+1 < n && E[child+1].weight && E[child].weight > E[child+1].weight) child ++;
         if(E[temp].weight > E[child].weight) Exchange(temp,child);
         temp = child;
         child = 2*child;
@@ -164,4 +169,58 @@ int judgeIFconnected(int Nv)
     
     if(count == 1) return 0;
     else return count;
+}
+
+int judgeIFunique(int v1, int v2, long long weight)
+{
+    int used[Max] = {0};
+    long long weightlog[Max] = {0};
+    //printf("--dfs search start--\n");
+    int flag = dfs(v1,v2,weightlog,used);
+    
+    int j = 0;
+    while(weightlog[j]){
+        if(weightlog[j] == weight) break;
+        j++;
+    }
+
+    if(weightlog[j] == weight) return 1;
+    else return 0;
+}
+
+int dfs(int start, int end, long long* weightlog, int* usedlog)
+{
+    if(start == end) return 1;
+    int flag = 0;
+
+    usedlog[start] = 1;
+    int i = 0;
+    for(;i<used;i++){
+        if(UsedE[i].v1 == start || UsedE[i].v2 == start){
+            if(UsedE[i].v1 == start){
+                if(!usedlog[UsedE[i].v2]){
+                    flag = dfs(UsedE[i].v2,end,weightlog,usedlog);
+                    if(flag == 1){
+                        int j = 0;
+                        while(weightlog[j])j++;
+                        weightlog[j] = UsedE[i].weight;
+                        //printf("find: %d -> %d : %lld\n",start,UsedE[i].v2,UsedE[i].weight);
+                        return 1;
+                    }
+                }
+            }else{
+                if(!usedlog[UsedE[i].v1]){
+                    flag = dfs(UsedE[i].v1,end,weightlog,usedlog);
+                    if(flag == 1){
+                        int j = 0;
+                        while(weightlog[j])j++;
+                        weightlog[j] = UsedE[i].weight;
+                        //printf("find: %d -> %d : %lld\n",start,UsedE[i].v1,UsedE[i].weight);
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+    return 0;
 }
