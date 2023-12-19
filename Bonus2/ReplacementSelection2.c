@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#define MaxN 100
+#define MaxN 100001
 
 //data structure
 struct list{
@@ -86,10 +86,12 @@ void downHeap(int list[], long long index, long long N)
 
     while(child <= N){
         if(child+1 <= N && list[child+1] < list[child]) child++;
-        if(list[index] > list[child]) list[index] = list[child];
+        if(temp > list[child]){
+            list[index] = list[child];
+            index = child;
+            child = index*2;
+        }
         else break;
-        index = child;
-        child = index*2;
     }
     list[index] = temp;
 }
