@@ -31,7 +31,7 @@ int main()
     for(;i<mainList.totalNum;i++) scanf("%d",&mainList.list[i]);
 
     //start rank
-    int lastnumber = -32766;
+    int lastnumber = -32768;
     for(i=1;i<=mainRam.maxRam;i++) mainRam.list[i] = mainList.list[mainList.readCount++];//read first list of numbers
     buildHeap(mainRam.list,mainRam.maxRam);
 
@@ -57,7 +57,7 @@ int main()
             for(i = 1;i<=tempRam.maxRam;i++) mainRam.list[i] = tempRam.list[i];
             mainRam.maxRam = tempRam.maxRam;
             tempRam.maxRam = 0;
-            lastnumber = -32766;
+            lastnumber = -32768;
             run.maxRam = 0;
             continue;
         }
@@ -98,6 +98,7 @@ void downHeap(int list[], long long index, long long N)
 
 void buildHeap(int list[], long long N)
 {
+    list[0] = -32768;
     long long temp = N/2+1;
     for(;temp>=1;temp--) downHeap(list,temp,N);
 }
@@ -112,6 +113,7 @@ int deleteMinandMaintainHeap(int list[], long long N)
 
 void insertHeap(int list[], long long index, int insertNumber)
 {
+    if(index <= 0) return;
     long long temp = index;
     if(index == 1){
         list[1] = insertNumber;
